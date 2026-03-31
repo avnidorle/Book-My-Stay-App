@@ -611,4 +611,31 @@ public class Main {
         // Final state
         system.displayInventory();
     }
+
+    // Create snapshot
+    public SystemState getState() {
+        return new SystemState(inventory, bookings);
+    }
+}
+
+// Main Class
+public class Main {
+    public static void main(String[] args) {
+
+        BookingSystem system = new BookingSystem();
+
+        // STEP 1: Load previous state
+        SystemState loadedState = PersistenceService.load();
+        system.restore(loadedState);
+
+        // STEP 2: Continue operations
+        system.book("RES101", "Arush", "Deluxe");
+        system.book("RES102", "Rahul", "Standard");
+
+        // STEP 3: Show current state
+        system.display();
+
+        // STEP 4: Save before exit
+        PersistenceService.save(system.getState());
+    }
 }
